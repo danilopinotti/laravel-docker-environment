@@ -27,11 +27,11 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_MULTIPLE_DATABASES=${APP_NAME-app}_dev,${APP_NAME-app}_test
-      - POSTGRES_PASSWORD=rapadura
+      - POSTGRES_PASSWORD=laraveldocker
       - POSTGRES_USER=postgres
 
   redis:
-    image: redis:4.0
+    image: redis:5.0
     command: --appendonly no
 
   laravel-echo:
