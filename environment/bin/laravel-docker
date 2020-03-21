@@ -1,0 +1,48 @@
+#!/bin/bash
+
+export APP_NAME='app'
+export LARAVEL_ROOT_PATH='./project'
+
+handle_command() {
+  if [ $1 == "start" ]; then
+    start_environment
+  fi
+
+  if [ $1 == "stop" ]; then
+    stop_environment
+  fi
+
+  if [ $1 == "clean" ]; then
+    clean_environment
+  fi
+}
+
+start_environment() {
+  echo -e "[\e[33mWAIT\e[39m] Starting environment"
+  docker-compose stop
+  docker-compose up -d --remove-orphans
+  if [ $? -eq 0 ]; then
+    echo -e "[\e[32mOK\e[39m] Environment started"
+  else
+    echo -e "[\e[31mFAIL\e[39m] Fail on starting environment."
+    stop_environment
+  fi
+
+  exit
+}
+
+stop_environment() {
+  echo -e "[\e[33mWAIT\e[39m] Stopping environment"
+  docker-compose stop
+  echo -e "[\e[32mOK\e[39m] Environment stopped"
+  exit
+}
+
+clean_environment() {
+  echo -e "[\e[33mWAIT\e[39m] Cleaning environment"
+  docker-compose down --remove-orphans
+  echo -e "[\e[32mOK\e[39m] Environment cleaned"
+  exit
+}
+
+handle_command $1

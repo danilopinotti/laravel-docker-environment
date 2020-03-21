@@ -1,0 +1,52 @@
+version: '3'
+
+volumes:
+  app-postgres-data:
+    driver: local
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - 80:8080
+    volumes:
+      - ${LARAVEL_ROOT_PATH-./}:/var/www/app
+      - ./environment/docker/web/site.conf:/etc/nginx/conf.d/site.conf
+
+  app:
+    build: environment/docker/app/.
+    volumes:
+      - ${LARAVEL_ROOT_PATH-./}:/var/www/app
+
+  postgres:
+    image: postgres:10.3
+    volumes:
+      - ${APP_NAME-app}-postgres-data:/var/lib/postgresql/data
+      - ./environment/docker/postgres/scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=${APP_NAME-app}_dev,${APP_NAME-app}_test
+      - POSTGRES_PASSWORD=rapadura
+      - POSTGRES_USER=postgres
+
+  redis:
+    image: redis:4.0
+    command: --appendonly no
+
+  laravel-echo:
+    build: environment/docker/laravel-echo/.
+    ports:
+      - "6001:6001"
+    volumes:
+      - ./environment/docker/laravel-echo/laravel-echo-server.json:/app/laravel-echo-server.json:ro
+
+  worker:
+    build: environment/docker/worker/.
+    volumes:
+      - ${LARAVEL_ROOT_PATH-./}:/var/www/app
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
