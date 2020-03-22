@@ -20,6 +20,8 @@ RUN apk upgrade --update && apk add \
   && docker-php-ext-install opcache
 
 RUN apk upgrade --update && apk add \
+    g++ \
+    make \
     nodejs \
     nodejs-npm
 
