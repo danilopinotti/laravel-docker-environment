@@ -1,6 +1,6 @@
 FROM jguyomard/laravel-php
 
-LABEL maintainer="danilopinotti@lets.com.vc"
+LABEL maintainer="danilopinotti@hotmail.com"
 
 RUN apk upgrade --update && apk add \
     curl \
