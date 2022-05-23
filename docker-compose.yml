@@ -6,17 +6,17 @@ volumes:
 
 services:
   web:
-    image: nginx:latest
+    image: webdevops/nginx
     ports:
-      - 80:8080
+      - "80:8080"
     volumes:
-      - ${LARAVEL_ROOT_PATH-./project}:/var/www/app
-      - ./environment/docker/web/site.conf:/etc/nginx/conf.d/site.conf
+      - ./project:/app
+      - ./environment/docker/web/site.conf:/opt/docker/etc/nginx/conf.d/site.conf
 
   app:
     build: environment/docker/app/.
     volumes:
-      - ${LARAVEL_ROOT_PATH-./project}:/var/www/app
+      - ./project:/app
 
   postgres:
     image: postgres:10.3
