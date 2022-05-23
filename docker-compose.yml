@@ -36,7 +36,9 @@ services:
   worker:
     build: environment/docker/worker/.
     volumes:
-      - ${LARAVEL_ROOT_PATH-./project}:/var/www/app
+      - ./project:/app
+    environment:
+      - PHP_MEMORY_LIMIT=64M
 
   mailcatcher:
     image: schickling/mailcatcher

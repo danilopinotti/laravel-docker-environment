@@ -1,22 +1,11 @@
-FROM jguyomard/laravel-php
+FROM webdevops/php:8.1-alpine
 
 LABEL maintainer="danilopinotti@hotmail.com"
 
-RUN apk upgrade --update && apk add \
-    curl \
-    nano \
-    bash \
-    shadow \
-    libtool \
-    zlib-dev \
-    exiftool \
-    libpng-dev \
-  && docker-php-ext-install gd \
-  && docker-php-ext-install exif \
-  && docker-php-ext-install opcache
+RUN docker-service-enable cron
 
-RUN echo '* * * * * cd /var/www/app && php artisan schedule:run' > /etc/crontabs/root
+# COPY config/horizon.conf /opt/docker/etc/supervisor.d/horizon-worker.conf
 
-WORKDIR /var/www/app
+RUN echo "* * * * * /usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1" >> /etc/crontabs/root
 
-ENTRYPOINT crond && php artisan horizon
+WORKDIR /app
