@@ -34,13 +34,6 @@ services:
     image: redis:5.0
     command: --appendonly no
 
-  laravel-echo:
-    build: environment/docker/laravel-echo/.
-    ports:
-      - "6001:6001"
-    volumes:
-      - ./environment/docker/laravel-echo/laravel-echo-server.json:/app/laravel-echo-server.json:ro
-
   worker:
     build: environment/docker/worker/.
     volumes:
